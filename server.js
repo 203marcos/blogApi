@@ -1,25 +1,38 @@
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Resolve __dirname (necessário para ES Modules)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 const API_URL = "https://blogapi-pzwt.onrender.com";
 
-console.log("Variáveis de ambiente carregadas:");
+// Configurar o diretório de views com caminho absoluto
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Route to render the main page
 app.get("/", async (req, res) => {
+    console.log("Recebida requisição GET em /");
+    console.log("API_URL:", API_URL);
+
     try {
         const response = await axios.get(`${API_URL}/posts`);
-        console.log(response);
+        console.log("Resposta do backend:", response.data);
         res.render("index.ejs", { posts: response.data });
     } catch (error) {
+        console.error("Erro ao buscar posts do backend:", error.message);
+        console.error("Detalhes do erro:", error.response?.data || error);
         res.status(500).json({ message: "Error fetching posts" });
     }
 });

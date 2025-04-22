@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log("Variáveis de ambiente carregadas:", process.env.MONGO_URI);
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -20,9 +19,9 @@ mongoose
 
 // Modelo do Post
 const postSchema = new mongoose.Schema({
-    title: String,
-    content: String,
-    author: String,
+    title: { type: String, required: true, trim: true },
+    content: { type: String, required: true },
+    author: { type: String, required: true, trim: true },
     date: { type: Date, default: Date.now },
 });
 
