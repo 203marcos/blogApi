@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
+console.log("Variáveis de ambiente carregadas:",)
 
 const app = express();
 const port = process.env.PORT || 4000;

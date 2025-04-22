@@ -6,6 +6,8 @@ const app = express();
 const port = 3000;
 const API_URL = "http://localhost:4000";
 
+console.log("Variáveis de ambiente carregadas:");
+
 app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
