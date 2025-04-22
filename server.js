@@ -43,8 +43,14 @@ app.get("/new", (req, res) => {
 });
 
 app.get("/edit/:id", async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).send("Post ID is required to edit a post.");
+    }
+
     try {
-        const response = await axios.get(`${API_URL}/posts/${req.params.id}`);
+        const response = await axios.get(`${API_URL}/posts/${id}`);
         console.log(response.data);
         res.render("modify.ejs", {
             heading: "Edit Post",
@@ -69,15 +75,14 @@ app.post("/api/posts", async (req, res) => {
 
 // Partially update a post
 app.post("/api/posts/:id", async (req, res) => {
-    console.log("called");
+    const { id } = req.params;
+
     try {
-        const response = await axios.patch(
-            `${API_URL}/posts/${req.params.id}`,
-            req.body
-        );
-        console.log(response.data);
+        const response = await axios.patch(`${API_URL}/posts/${id}`, req.body);
+        console.log("Post atualizado:", response.data);
         res.redirect("/");
     } catch (error) {
+        console.error("Erro ao atualizar post:", error.message);
         res.status(500).json({ message: "Error updating post" });
     }
 });

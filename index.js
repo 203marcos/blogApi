@@ -76,12 +76,13 @@ app.post("/posts", async (req, res) => {
 app.patch("/posts/:id", async (req, res) => {
     try {
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
+            new: true, // Retorna o documento atualizado
         });
         if (!post)
             return res.status(404).json({ message: "Post não encontrado" });
         res.json(post);
     } catch (err) {
+        console.error("Erro ao atualizar post:", err);
         res.status(500).json({ message: "Erro ao atualizar post" });
     }
 });
