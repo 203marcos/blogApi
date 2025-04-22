@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
-console.log("Variáveis de ambiente carregadas:",)
+console.log("Variáveis de ambiente carregadas:", process.env.MONGO_URI);
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -34,31 +34,42 @@ app.use(bodyParser.json());
 
 // Rotas
 app.get("/posts", async (req, res) => {
+    console.log("Recebida requisição GET em /posts");
     try {
         const posts = await Post.find();
+        console.log("Posts encontrados:", posts);
         res.json(posts);
     } catch (err) {
+        console.error("Erro ao buscar posts:", err);
         res.status(500).json({ message: "Erro ao buscar posts" });
     }
 });
 
 app.get("/posts/:id", async (req, res) => {
+    console.log(`Recebida requisição GET em /posts/${req.params.id}`);
     try {
         const post = await Post.findById(req.params.id);
-        if (!post)
+        if (!post) {
+            console.log("Post não encontrado:", req.params.id);
             return res.status(404).json({ message: "Post não encontrado" });
+        }
+        console.log("Post encontrado:", post);
         res.json(post);
     } catch (err) {
+        console.error("Erro ao buscar post:", err);
         res.status(500).json({ message: "Erro ao buscar post" });
     }
 });
 
 app.post("/posts", async (req, res) => {
+    console.log("Recebida requisição POST em /posts com body:", req.body);
     try {
         const post = new Post(req.body);
         await post.save();
+        console.log("Post criado com sucesso:", post);
         res.status(201).json(post);
     } catch (err) {
+        console.error("Erro ao criar post:", err);
         res.status(500).json({ message: "Erro ao criar post" });
     }
 });

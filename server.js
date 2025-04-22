@@ -4,7 +4,7 @@ import axios from "axios";
 
 const app = express();
 const port = 3000;
-const API_URL = "http://localhost:4000";
+const API_URL = "https://blogapi-pzwt.onrender.com";
 
 console.log("Variáveis de ambiente carregadas:");
 
